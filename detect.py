@@ -70,7 +70,6 @@ class Yolo():
 
         return im
 
-
     def postprocess(self, im, im0, pred, classes):
         bboxes=[]
         pred = non_max_suppression(pred, self.settings["conf_thres"], self.settings["iou_thres"], classes, self.settings["agnostic_nms"], max_det=self.settings["max_det"])
@@ -94,14 +93,20 @@ class Yolo():
 
         return canvas
 
-
     def detect(self, frame, classes):
+
+        #! Ön işleme
         im = self.preprocess(frame)
         
+        #! Inference
         result = self.model(im, augment=False)
         
+        #! Son İşleme
         bbox = self.postprocess(im, frame, result, classes)
-        canvas=self.draw(frame,bbox)
+
+        #! Çizdirme
+        canvas=self.draw(frame, bbox)
+
         cv2.imshow('',canvas)
         cv2.waitKey(0)
 
