@@ -5,6 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import cv2
 
 from utils.augmentations import letterbox
 
@@ -102,16 +103,22 @@ class Yolo():
         result = self.model(im, augment=False)
         
         #! Son İşleme
-        bbox = self.postprocess(im, frame, result, classes)
+        bboxes = self.postprocess(im, frame, result, classes)
+        return bboxes
 
         #! Çizdirme
-        canvas=self.draw(frame, bbox)
+        # canvas=self.draw(frame, bboxes)
 
-        cv2.imshow('',canvas)
-        cv2.waitKey(0)
+        # cv2.imshow('',canvas)
+        # cv2.waitKey(0)
 
 
 if __name__=="__main__":
     manager=Yolo()
+
+
+
     img = cv2.imread("data/images/zidane.jpg")
-    manager.detect(img, [0])
+    bboxes = manager.detect(img, [0])
+
+    manager.draw()
